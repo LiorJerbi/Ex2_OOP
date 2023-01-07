@@ -9,6 +9,8 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class Ex2 {
+    Ex2_2.Task task=null;
+    Ex2_2.CustomExecutor customExecutor=null;
     public class Ex2_1{
         public static String[] createTextFiles(int n, int seed, int bound){
             String[] files = new String[n];
@@ -122,7 +124,6 @@ public class Ex2 {
     }
 
     public class Ex2_2{
-
         public class Task implements Callable<Object>,Comparable<Task>{
             private Callable<Object> task;
             private TaskType tPriority;
@@ -256,19 +257,17 @@ public class Ex2 {
 
         public class CustomExecutor {
 
-            private static PriorityBlockingQueue<Task> taskPool;
-            private static int maxPrio=Integer.MAX_VALUE;
-            ScheduledThreadPoolExecutor stpe;
+            private static BlockingQueue<Runnable> taskQ = new PriorityBlockingQueue<>();;
+            private static int maxPrio;
+            private static ThreadPoolExecutor tPool;
             static final int numOfCores = Runtime.getRuntime().availableProcessors();
             static final int corePoolSize = numOfCores/2;
             static final int maxPoolSize = numOfCores-1;
 
 
             public CustomExecutor(){
-//                stpe = new ScheduledThreadPoolExecutor(corePoolSize);
-//                stpe.setMaximumPoolSize(maxPoolSize);
-//                stpe.setKeepAliveTime(300,TimeUnit.MILLISECONDS);
-                taskPool  = new PriorityBlockingQueue<Task>();
+                tPool = new ThreadPoolExecutor(corePoolSize,maxPoolSize,300,TimeUnit.MILLISECONDS,taskQ);
+                maxPrio = Integer.MAX_VALUE;
             }
 
             public Future<Object> submit(Callable<Object> task){
@@ -306,18 +305,46 @@ public class Ex2 {
             }
             public static Future<Object> submit(Task task){
                 Future<Object> fut = null;
-                if(taskPool.size()>maxPoolSize){
-                    System.out.println("Not enough space for another Task");
+                if(task == null){
+                    System.out.println("null task");
+                    return null;
                 }
-                else {
-                    taskPool.add(task);
+                else{
+                    if(taskQ.size()>maxPoolSize){
+                        System.out.println("Not enough space for another Task");
+                    }
+                    else {
+                        if(maxPrio>task.gettPriority().getPriorityValue()){
+                            maxPrio=task.gettPriority().getPriorityValue();
+                        }
+                        try {
+                            fut = tPool.submit(task);
+                        } catch (Exception e) {
+                            tPool.shutdown();
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    return fut;
+                }
+            }
+            public int getCurrentMax(){
+                return maxPrio;
+            }
+
+            public static void shutdown() {
+                tPool.shutdown();
+                while(!tPool.isTerminated()) {
                     try {
-                        fut = (Future<Object>) task.call();
-                    } catch (Exception e) {
+                        tPool.awaitTermination(300,TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }
-                return fut;
+            }
+
+
+            public static int getMaximumPoolSize() {
+                return tPool.getMaximumPoolSize();
             }
         }
 
