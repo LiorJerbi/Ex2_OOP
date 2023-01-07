@@ -29,18 +29,6 @@ public class LineCountThread extends Thread{
             e.printStackTrace();
         }
     }
-    @Override
-    public State getState() {
-        return super.getState();
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
 
     public int getLines() {
 
