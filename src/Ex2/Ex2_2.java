@@ -7,113 +7,116 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
 
+// given the orders to implement class inside the class, the Ex2_2 is an empty class
 public class Ex2_2{
 
     }
     class Task implements Callable,Comparable<Task> {
-    private Callable task;
-    private TaskType tPriority;
-    private static Comparator<Task> comp = new Comparator<Task>() {
-        @Override
-        public int compare(Task o1, Task o2) {
-            return o1.gettPriority().getPriorityValue()-o2.gettPriority().getPriorityValue();
+        private Callable task;
+        private TaskType tPriority;
+        //The Task comparator in charge of ordering tasks by tasktype in the queue
+        private static Comparator<Task> comp = new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                return o1.gettPriority().getPriorityValue() - o2.gettPriority().getPriorityValue();
+            }
+        };
+
+        public static Comparator<Task> getComp() {
+            return comp;
         }
-    };
 
-    public static Comparator<Task> getComp() {
-        return comp;
-    }
-
-    /*
+        /*
         private constructor for inner class use only.(To hide the implementation from the user)
+        */
+        private Task(Callable task, TaskType prio) {
+            this.task = task;
+            tPriority = prio;
+        }
+
+        /*
+        Factory method for Task object creation with the given priority.
+        */
+        public static Task createTask(Callable task, TaskType prio) {
+            if (task == null) {
+                System.out.println("task is null");
+                return null;
+            } else if (prio.getPriorityValue() > 10 || prio.getPriorityValue() < 1) {
+                System.out.println("Priority need to be in range of 1-10");
+                return null;
+            } else {
+                return new Task(task, prio);
+            }
+        }
+
+        /*
+        Factory method for Task object creation with default(TaskType.OTHER) priority.
          */
-    private Task(Callable task, TaskType prio) {
-        this.task = task;
-        tPriority = prio;
-    }
-
-    /*
-    Factory method for Task object creation with the given priority.
-    */
-    public static Task createTask(Callable task, TaskType prio) {
-        if (task == null) {
-            System.out.println("task is null");
-            return null;
-        } else if (prio.getPriorityValue()>10||prio.getPriorityValue()<1) {
-            System.out.println("Priority need to be in range of 1-10");
-            return null;
-        } else {
-            return new Task(task, prio);
+        public static Task createTask(Callable task) {
+            if (task == null) {
+                System.out.println("task is null");
+                return null;
+            }
+            return new Task(task, TaskType.OTHER);
         }
-    }
 
-    /*
-    Factory method for Task object creation with default(TaskType.OTHER) priority.
-     */
-    public static Task createTask(Callable task) {
-        if (task == null) {
-            System.out.println("task is null");
-            return null;
+        public TaskType gettPriority() {
+            return tPriority;
         }
-        return new Task(task, TaskType.OTHER);
-    }
-    public TaskType gettPriority() {
-        return tPriority;
-    }
 
-    public void settPriority(TaskType tPriority) {
-        this.tPriority = tPriority;
-    }
-
-    /*
-    Compare method that compares Task priority values.
-     */
-    @Override
-    public int compareTo(Task o) {
-        return Integer.compare(tPriority.getPriorityValue(), o.gettPriority().getPriorityValue());
-    }
-
-    @Override
-    public Object call() throws Exception {
-        try {
-            return task.call();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+        /*
+        Compare method that compares Task priority values.
+         */
+        @Override
+        public int compareTo(Task o) {
+            return Integer.compare(tPriority.getPriorityValue(), o.gettPriority().getPriorityValue());
         }
+
+        /*
+        Uses the super calL() method for an asynchronous task which returns a generic value
+         */
+        @Override
+        public Object call() throws Exception {
+            try {
+                return task.call();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Task{" +
+                    "task=" + task +
+                    ", tPriority=" + tPriority +
+                    '}';
+        }
+
+        public boolean equals(Task o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            return tPriority == o.tPriority;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(tPriority);
+        }
+
+
     }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "task=" + task +
-                ", tPriority=" + tPriority +
-                '}';
-    }
-
-    public boolean equals(Task o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return tPriority == o.tPriority;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(tPriority);
-    }
-
-
-}
-
-
+    //Represents new type of ThreadPool that supports tasks priority queue
     class CustomExecutor{
 
-    private PriorityBlockingQueue taskQ;
+    private PriorityBlockingQueue taskQ;                    //a task priority queue
     private int maxPrio,numOfCores,corePoolSize,maxPoolSize;
-    private ThreadPoolExecutor tPool;
+    private ThreadPoolExecutor tPool;                       //the executor type
     public static Future future;
 
 
-
+/*
+an empty constructor of the class that implements the executor bounds for each user's processors limitations
+ */
     public CustomExecutor(){
         numOfCores = Runtime.getRuntime().availableProcessors();
         corePoolSize = numOfCores/2;
@@ -122,7 +125,7 @@ public class Ex2_2{
         this.tPool = new ThreadPoolExecutor(corePoolSize,maxPoolSize, 300, TimeUnit.MILLISECONDS,taskQ);
         maxPrio = Integer.MAX_VALUE;
     }
-
+    //submit an asynchronic operation without task priority as parameter
     public <T> Future<T> submit(Callable task){
         if(task!=null){
             Task nt1 = Task.createTask(task);
@@ -136,6 +139,7 @@ public class Ex2_2{
         }
         return future;
     }
+    // submit an asynchronic operation with task priority as parameter
     public <T> Future<T> submit(Callable task, TaskType prio){
         if(task!=null){
             if(prio!=null){
@@ -155,6 +159,7 @@ public class Ex2_2{
         }
         return future;
     }
+    //method to submit a task to the priority queue
     public <T> Future<T> submit(Task task){
         if(task == null){
             System.out.println("null task");
@@ -178,10 +183,14 @@ public class Ex2_2{
             return future;
         }
     }
+    //returns the highest priority that has been inserted to the queue
     public int getCurrentMax(){
         return maxPrio;
     }
-
+    /* that method stops the CustomExecutor activity:
+     done by blocking any other tasks from been submitted to the queue
+     and finish all the remaining task in the line
+     */
     public void gracefullyTerminate() {
         tPool.shutdown();
         while(!tPool.isTerminated()) {
@@ -192,11 +201,11 @@ public class Ex2_2{
             }
         }
     }
-
+    //return value from future variable, waits if needed
     public static <V> Object get() throws InterruptedException, ExecutionException {
         return future.get();
     }
-
+    //return the value from future variable, waits until timeout to do so
     public static <V> Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return future.get(timeout, unit);
     }
@@ -208,7 +217,8 @@ public class Ex2_2{
     public int getCorePoolSize() {
         return corePoolSize;
     }
-
+    //shuts down the executor without considering the undone tasks
+    //return list of all undone tasks
     public List<Runnable> shutdownNow() {
         return tPool.shutdownNow();
     }
@@ -224,7 +234,7 @@ public class Ex2_2{
     public boolean isTerminated() {
         return tPool.isTerminated();
     }
-
+    //how much time to wait until stops
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
         return tPool.awaitTermination(timeout, unit);
     }
@@ -251,22 +261,6 @@ public class Ex2_2{
 
     public long getCompletedTaskCount() {
         return tPool.getCompletedTaskCount();
-    }
-
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
-        return tPool.invokeAny(tasks);
-    }
-
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return tPool.invokeAny(tasks, timeout, unit);
-    }
-
-    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
-        return tPool.invokeAll(tasks);
-    }
-
-    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
-        return tPool.invokeAll(tasks, timeout, unit);
     }
 }
 

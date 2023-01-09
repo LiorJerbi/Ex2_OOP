@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class Ex2_1{
-
+    //creating n text files with a random line number
     public static String[] createTextFiles(int n, int seed, int bound){
         String[] files = new String[n];
         Random rand = new Random(seed);
@@ -46,6 +46,7 @@ public class Ex2_1{
         return files;
 
     }
+    //No thread method to calculate the total number of lines in the files from the given array
     public static int getNumOfLines(String[] fileNames){
         int lineCounter=0;
         File tempFile=null;
@@ -67,6 +68,7 @@ public class Ex2_1{
         }
         return lineCounter;
     }
+    //method to calculate the total number of lines in the files from the given array using threads
     public int getNumOfLinesThreads(String[] fileNames){
         int lineCounter=0;
         for (String fileName : fileNames) {
@@ -81,7 +83,7 @@ public class Ex2_1{
         }
         return lineCounter;
     }
-
+    //method to calculate the total number of lines in the files from the given array using thread-pool
         public int getNumOfLinesThreadPool(String[] fileNames){
         ExecutorService filesTPool = Executors.newFixedThreadPool(fileNames.length);
         int lineCounter = 0;
@@ -104,7 +106,7 @@ public class Ex2_1{
         return lineCounter;
     }
 
-
+    // deleting the files from the given array
     public static void deleteFiles(String[] filenames){
         for(int i=0;i<filenames.length;i++) {
             File obj = new File("file_"+ (i+1) +".txt");
@@ -123,13 +125,14 @@ public class Ex2_1{
     }
 
 }
+
 class LineCountTPool implements Callable<Integer> {
 
     String filename="";
     public LineCountTPool(String filename) {
         this.filename=filename;
     }
-
+    //implements call() method to calculate asynchronicly the lines from the files
     @Override
     public Integer call() throws Exception {
         File tempFile=null;
@@ -150,16 +153,18 @@ class LineCountTPool implements Callable<Integer> {
         return lineCounter;
     }
 }
+// a class that implements run() method
 class LineCountThread extends Thread{
     String filename="";
     private int lines;
 
-
+    //empty constructor
     public LineCountThread(String filename) {
         this.filename=filename;
         this.lines=0;
     }
 
+    //run implement to count line from file with Thread
     @Override
     public void run() {
         File tempFile=null;
