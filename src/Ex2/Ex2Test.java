@@ -55,24 +55,24 @@ public class Ex2Test {
             customExecutor.gracefullyTerminate();
 
         }
-    @Test
-    public void Ex2_1test() {
-//        Ex2.Ex2_1 ex2 = new Ex2.Ex2_1();
-//        String[] test =new String[10];
-//        test = Ex2.Ex2_1.createTextFiles(test.length,1,99999);
-//        long startTime = System.currentTimeMillis();
-//        int ch = Ex2.Ex2_1.getNumOfLines(test);
-//        long elapsedTime = System.currentTimeMillis() - startTime;
-//        System.out.println("[NORMAL] Lines:"+ch+" Timer:"+elapsedTime+" ms");
-//        startTime = System.currentTimeMillis();
-//        int ch1 = ex2.getNumOfLinesThreads(test);
-//        elapsedTime = System.currentTimeMillis() - startTime;
-//        System.out.println("[Thread] Lines:"+ch1+" Timer:"+elapsedTime+" ms");
-//        startTime = System.currentTimeMillis();
-//        int ch2 = ex2.getNumOfLinesThreadPool(test);
-//        elapsedTime = System.currentTimeMillis() - startTime;
-//        System.out.println("[ThreadPool] Lines:"+ch2+" Timer:"+elapsedTime+" ms");
-//        Ex2.Ex2_1.Ex2.Ex2_1.deleteFiles(test);
+        @Test
+        public void Ex2_1test() {
+        Ex2_1 ex2 = new Ex2_1();
+        String[] test =new String[10];
+        test = Ex2_1.createTextFiles(test.length,1,99999);
+        long startTime = System.currentTimeMillis();
+        int ch = Ex2_1.getNumOfLines(test);
+        long elapsedTime = System.currentTimeMillis() - startTime;
+        System.out.println("[NORMAL] Lines:"+ch+" Timer:"+elapsedTime+" ms");
+        startTime = System.currentTimeMillis();
+        int ch1 = ex2.getNumOfLinesThreads(test);
+        elapsedTime = System.currentTimeMillis() - startTime;
+        System.out.println("[Thread] Lines:"+ch1+" Timer:"+elapsedTime+" ms");
+        startTime = System.currentTimeMillis();
+        int ch2 = ex2.getNumOfLinesThreadPool(test);
+        elapsedTime = System.currentTimeMillis() - startTime;
+        System.out.println("[ThreadPool] Lines:"+ch2+" Timer:"+elapsedTime+" ms");
+        Ex2_1.deleteFiles(test);
     }
     }
 
