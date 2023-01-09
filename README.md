@@ -1,5 +1,5 @@
 # Ex2_OOP
-## Part one Ex2_1 
+## Part one Ex2.Ex2_1 
 
 In this assigment we are creating various text files in a random size, and calculating the number of lines in each file.  
 We are using three methods:

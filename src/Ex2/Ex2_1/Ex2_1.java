@@ -1,4 +1,4 @@
-package Ex2;
+package Ex2.Ex2_1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -121,69 +121,69 @@ public class Ex2_1{
     public String toString() {
         return super.toString();
     }
-    public static class LineCountThread extends Thread{
-        String filename="";
-        private int lines;
 
+}
+class LineCountTPool implements Callable<Integer> {
 
-        public LineCountThread(String filename) {
-            this.filename=filename;
-            this.lines=0;
-        }
-
-        @Override
-        public void run() {
-            File tempFile=null;
-            Scanner fileReader=null;
-            try{
-                tempFile = new File(this.filename);
-                fileReader = new Scanner(tempFile);
-                while(fileReader.hasNextLine()){
-                    this.lines++;
-                    fileReader.nextLine();
-                }
-                fileReader.close();
-            }catch(FileNotFoundException e){
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
-        }
-
-        public int getLines() {
-
-            return lines;
-        }
-
+    String filename="";
+    public LineCountTPool(String filename) {
+        this.filename=filename;
     }
-    public static class LineCountTPool implements Callable<Integer> {
 
-        String filename="";
-        public LineCountTPool(String filename) {
-            this.filename=filename;
-        }
-
-        @Override
-        public Integer call() throws Exception {
-            File tempFile=null;
-            Scanner fileReader=null;
-            int lineCounter = 0;
-            try{
-                tempFile = new File(this.filename);
-                fileReader = new Scanner(tempFile);
-                while(fileReader.hasNextLine()){
-                    lineCounter++;
-                    fileReader.nextLine();
-                }
-                fileReader.close();
-            }catch(FileNotFoundException e){
-                System.out.println("An error occurred.");
-                e.printStackTrace();
+    @Override
+    public Integer call() throws Exception {
+        File tempFile=null;
+        Scanner fileReader=null;
+        int lineCounter = 0;
+        try{
+            tempFile = new File(this.filename);
+            fileReader = new Scanner(tempFile);
+            while(fileReader.hasNextLine()){
+                lineCounter++;
+                fileReader.nextLine();
             }
-            return lineCounter;
+            fileReader.close();
+        }catch(FileNotFoundException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
+        return lineCounter;
     }
 }
+class LineCountThread extends Thread{
+    String filename="";
+    private int lines;
 
+
+    public LineCountThread(String filename) {
+        this.filename=filename;
+        this.lines=0;
+    }
+
+    @Override
+    public void run() {
+        File tempFile=null;
+        Scanner fileReader=null;
+        try{
+            tempFile = new File(this.filename);
+            fileReader = new Scanner(tempFile);
+            while(fileReader.hasNextLine()){
+                this.lines++;
+                fileReader.nextLine();
+            }
+            fileReader.close();
+        }catch(FileNotFoundException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public int getLines() {
+
+        return lines;
+    }
+
+}
 
 
 

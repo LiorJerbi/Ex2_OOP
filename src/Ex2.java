@@ -9,8 +9,8 @@
 //import java.util.concurrent.*;
 //
 //public class Ex2 {
-////    Ex2_2.Task task=null;
-////    Ex2_2.CustomExecutor customExecutor=null;
+////    Ex2.Ex2_2.Task task=null;
+////    Ex2.Ex2_2.CustomExecutor customExecutor=null;
 //
 //    public class Ex2_1_before{
 //        public static String[] createTextFiles(int n, int seed, int bound){
@@ -353,20 +353,20 @@
 //
 //    public static void main(String[] args) {
 //        String[] test =new String[10000];
-//        test = Ex2.Ex2_1.createTextFiles(test.length,1,99999);
+//        test = Ex2.Ex2_1.Ex2.Ex2_1.createTextFiles(test.length,1,99999);
 //        long startTime = System.currentTimeMillis();
-//        int ch = Ex2.Ex2_1.getNumOfLines(test);
+//        int ch = Ex2.Ex2_1.Ex2.Ex2_1.getNumOfLines(test);
 //        long elapsedTime = System.currentTimeMillis() - startTime;
 //        System.out.println("[NORMAL] Lines:"+ch+" Timer:"+elapsedTime+" ms");
 //        startTime = System.currentTimeMillis();
-//        int ch1 = Ex2.Ex2_1.getNumOfLinesThreads(test);
+//        int ch1 = Ex2.Ex2_1.Ex2.Ex2_1.getNumOfLinesThreads(test);
 //        elapsedTime = System.currentTimeMillis() - startTime;
 //        System.out.println("[Thread] Lines:"+ch1+" Timer:"+elapsedTime+" ms");
 //        startTime = System.currentTimeMillis();
-//        int ch2 = Ex2.Ex2_1.getNumOfLinesThreadPool(test);
+//        int ch2 = Ex2.Ex2_1.Ex2.Ex2_1.getNumOfLinesThreadPool(test);
 //        elapsedTime = System.currentTimeMillis() - startTime;
 //        System.out.println("[ThreadPool] Lines:"+ch2+" Timer:"+elapsedTime+" ms");
-//        Ex2.Ex2_1.deleteFiles(test);
+//        Ex2.Ex2_1.Ex2.Ex2_1.deleteFiles(test);
 //
 //
 //    }
