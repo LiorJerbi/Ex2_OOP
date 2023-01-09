@@ -56,6 +56,7 @@ class Ex2_1Test {
             logger.info(()-> "Current maximum priority = " +
                     customExecutor.getCurrentMax());
             customExecutor.gracefullyTerminate();
+
         }
     @Test
     public void test() {

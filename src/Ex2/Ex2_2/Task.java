@@ -70,11 +70,11 @@ public class Task implements Callable,Comparable<Task> {
 
     @Override
     public Object call() throws Exception {
-            try {
-                return task.call();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            return task.call();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -98,7 +98,6 @@ public class Task implements Callable,Comparable<Task> {
 
 
 }
-
 
 
 

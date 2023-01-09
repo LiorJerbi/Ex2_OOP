@@ -1,5 +1,7 @@
 package Ex2.Ex2_2;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class CustomExecutor{
@@ -90,11 +92,11 @@ public class CustomExecutor{
         }
     }
 
-    public static Object get() throws InterruptedException, ExecutionException {
+    public static <V> Object get() throws InterruptedException, ExecutionException {
         return future.get();
     }
 
-    public static Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public static <V> Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return future.get(timeout, unit);
     }
 
@@ -104,5 +106,65 @@ public class CustomExecutor{
 
     public int getCorePoolSize() {
         return corePoolSize;
+    }
+
+    public List<Runnable> shutdownNow() {
+        return tPool.shutdownNow();
+    }
+
+    public boolean isShutdown() {
+        return tPool.isShutdown();
+    }
+
+    public boolean isTerminating() {
+        return tPool.isTerminating();
+    }
+
+    public boolean isTerminated() {
+        return tPool.isTerminated();
+    }
+
+    public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+        return tPool.awaitTermination(timeout, unit);
+    }
+
+    public long getKeepAliveTime(TimeUnit unit) {
+        return tPool.getKeepAliveTime(unit);
+    }
+
+    public int getPoolSize() {
+        return tPool.getPoolSize();
+    }
+
+    public int getActiveCount() {
+        return tPool.getActiveCount();
+    }
+
+    public int getLargestPoolSize() {
+        return tPool.getLargestPoolSize();
+    }
+
+    public long getTaskCount() {
+        return tPool.getTaskCount();
+    }
+
+    public long getCompletedTaskCount() {
+        return tPool.getCompletedTaskCount();
+    }
+
+    public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
+        return tPool.invokeAny(tasks);
+    }
+
+    public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return tPool.invokeAny(tasks, timeout, unit);
+    }
+
+    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
+        return tPool.invokeAll(tasks);
+    }
+
+    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
+        return tPool.invokeAll(tasks, timeout, unit);
     }
 }
