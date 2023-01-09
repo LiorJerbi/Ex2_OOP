@@ -1,8 +1,5 @@
 package Ex2;
 
-import Ex2.Ex2_2.CustomExecutor;
-import Ex2.Ex2_2.Task;
-import Ex2.Ex2_2.TaskType;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
@@ -10,9 +7,9 @@ import java.util.concurrent.*;
 
 import java.util.concurrent.Callable;
 
-class Ex2_1Test {
+public class Ex2Test {
 
-        public static final Logger logger = LoggerFactory.getLogger(Ex2_1Test.class);
+        public static final Logger logger = LoggerFactory.getLogger(Ex2Test.class);
         @Test
         public void partialTest(){
             CustomExecutor customExecutor = new CustomExecutor();
@@ -59,7 +56,7 @@ class Ex2_1Test {
 
         }
     @Test
-    public void test() {
+    public void Ex2_1test() {
 //        Ex2.Ex2_1 ex2 = new Ex2.Ex2_1();
 //        String[] test =new String[10];
 //        test = Ex2.Ex2_1.createTextFiles(test.length,1,99999);
@@ -76,15 +73,6 @@ class Ex2_1Test {
 //        elapsedTime = System.currentTimeMillis() - startTime;
 //        System.out.println("[ThreadPool] Lines:"+ch2+" Timer:"+elapsedTime+" ms");
 //        Ex2.Ex2_1.Ex2.Ex2_1.deleteFiles(test);
-        Callable<Integer> c1 = () -> {
-            return 1000*3;
-        };
-
-        Task task = Task.createTask(c1);
-        CustomExecutor ce = new CustomExecutor();
-        ce.submit(task);
-
-
     }
     }
 

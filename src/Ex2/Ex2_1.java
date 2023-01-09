@@ -1,4 +1,4 @@
-package Ex2.Ex2_1;
+package Ex2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
